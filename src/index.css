@@ -27,8 +27,16 @@ body,
 
 body {
   touch-action: none;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 button {
   font: inherit;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
 }

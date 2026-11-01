@@ -13,6 +13,8 @@ export default function PlayerController() {
   const laneRef = useRef(1);
   const { camera } = useThree();
   const joystick = useGameStore((state) => state.joystick);
+  const laneRequest = useGameStore((state) => state.laneRequest);
+  const consumeLaneChange = useGameStore((state) => state.consumeLaneChange);
   const gameStarted = useGameStore((state) => state.gameStarted);
   const demoMode = useGameStore((state) => state.demoMode);
   const gameOver = useGameStore((state) => state.gameOver);
@@ -23,6 +25,7 @@ export default function PlayerController() {
   const setPlayerPosition = useGameStore((state) => state.setPlayerPosition);
   const updateDistance = useGameStore((state) => state.updateDistance);
   const lastRunRef = useRef(runId);
+  const joystickLaneHeldRef = useRef(false);
 
   useEffect(() => {
     const down = (event) => {
@@ -48,14 +51,21 @@ export default function PlayerController() {
     if (lastRunRef.current !== runId) {
       lastRunRef.current = runId;
       laneRef.current = 1;
+      joystickLaneHeldRef.current = false;
       body.setTranslation({ x: 0, y: 1.4, z: 8 }, true);
       body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     }
     const position = body.translation();
-    const targetLane = Math.abs(joystick.x) > 0.55
-      ? Math.min(2, Math.max(0, laneRef.current + (joystick.x > 0 ? 1 : -1)))
-      : laneRef.current;
-    if (Math.abs(joystick.x) > 0.55) laneRef.current = targetLane;
+    if (laneRequest) {
+      laneRef.current = Math.min(2, Math.max(0, laneRef.current + laneRequest));
+      consumeLaneChange();
+    }
+    if (Math.abs(joystick.x) > 0.55 && !joystickLaneHeldRef.current) {
+      laneRef.current = Math.min(2, Math.max(0, laneRef.current + (joystick.x > 0 ? 1 : -1)));
+      joystickLaneHeldRef.current = true;
+    } else if (Math.abs(joystick.x) < 0.25) {
+      joystickLaneHeldRef.current = false;
+    }
 
     if ((gameStarted || demoMode) && !gameOver) {
       const speed = Math.min(15, 8 + Math.max(0, 8 - position.z) * 0.018);

@@ -44,8 +44,8 @@ function Overlay() {
         </button>
       )}
       <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-center text-[10px] tracking-[0.25em] text-white/50">
-        <p>SLIDE LEFT / RIGHT TO CHANGE LANES</p>
-        <p className="mt-1">JUMP OVER HAZARDS · COLLECT COINS</p>
+        <p>PC: A/D OR ARROWS · MOBILE: SWIPE / SLIDE</p>
+        <p className="mt-1">SPACE / JUMP BUTTON · COLLECT COINS</p>
       </div>
 
       {!gameStarted && (
@@ -61,7 +61,7 @@ function Overlay() {
             <div className="mx-auto mt-5 grid max-w-lg gap-2 rounded-2xl border border-white/10 bg-slate-950/60 p-4 text-left text-xs leading-5 text-slate-300">
               <p className="font-bold tracking-[0.25em] text-cyan-200">RUN RULES</p>
               <p>1. Your runner sprints forward automatically.</p>
-              <p>2. Slide left or right, or use A/D and arrow keys, to change lanes.</p>
+              <p>2. Mobile: swipe or slide left/right. PC/laptop: use A/D or arrow keys.</p>
               <p>3. Press jump, Space, or Up to clear walls, flames, and energy gates.</p>
               <p>4. Collect gold rings for bonus points and survive as long as possible.</p>
             </div>
