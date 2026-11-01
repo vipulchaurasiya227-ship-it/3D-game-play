@@ -1,0 +1,47 @@
+import { create } from "zustand";
+
+export const useGameStore = create((set) => ({
+  score: 0,
+  coins: 0,
+  distance: 0,
+  bestDistance: 0,
+  gameStarted: false,
+  gameOver: false,
+  demoMode: false,
+  demoComplete: false,
+  runId: 0,
+  joystick: { x: 0, y: 0 },
+  jumpRequested: false,
+  playerPosition: [0, 1.4, 8],
+  startDemo: () => set({ demoMode: true, demoComplete: false }),
+  finishDemo: () => set({ demoMode: false, demoComplete: true, gameOver: false }),
+  startGame: () => set((state) => ({
+    gameStarted: true,
+    gameOver: false,
+    demoMode: false,
+    demoComplete: false,
+    score: 0,
+    coins: 0,
+    distance: 0,
+    jumpRequested: false,
+    playerPosition: [0, 1.4, 8],
+    runId: state.runId + 1,
+  })),
+  endGame: () => set((state) => ({
+    gameStarted: false,
+    gameOver: true,
+    bestDistance: Math.max(state.bestDistance, state.distance),
+  })),
+  addCoin: () => set((state) => ({
+    coins: state.coins + 1,
+    score: state.score + 10,
+  })),
+  updateDistance: (distance) => set((state) => ({
+    distance,
+    score: Math.max(state.score, Math.floor(distance)),
+  })),
+  setJoystick: (x, y) => set({ joystick: { x, y } }),
+  requestJump: () => set({ jumpRequested: true }),
+  consumeJump: () => set({ jumpRequested: false }),
+  setPlayerPosition: (x, y, z) => set({ playerPosition: [x, y, z] }),
+}));
